@@ -25,11 +25,11 @@ def get_balneabilidade_for_municipio(municipio_name, municipio_id, area_id):
 		tds = line.find_all('td')
 		img = tds[0].find('img')
 		font = tds[1].text
-		print 'LINE: ', line
-		print 'IMG: ', img
-		print 'FONT: ', font
-		# print 'onClick: ', img.onclick
-		print
+		print('LINE: ', line)
+		print('IMG: ', img)
+		print('FONT: ', font)
+		# print('onClick: ', img.onclick)
+		print()
 
 
 if __name__ == "__main__":
@@ -53,13 +53,13 @@ if __name__ == "__main__":
 	# Get 
 	municipios_index = dict()
 	for i in combo_municipio_values:
-		print i
-		print i.text
-		print i['value']
+		print(i)
+		print(i.text)
+		print(i['value'])
 		municipios_index[i.text] = i['value']
 
 
 	floripa = get_municipio_areas(2)
-	print floripa
+	print(floripa)
 
 	baln = get_balneabilidade_for_municipio('FLORIANOPOLIS', 2, 77)
