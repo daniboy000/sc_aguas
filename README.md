@@ -5,5 +5,5 @@ O projeto SC Águas disponibiliza uma API, a fim de facilitar o acesso aos dados
 #### **Instalando todas as dependências**
 
 ```
-$ workon pybr12-site && pip install -r requirements.txt
+$ pip install -r requirements.txt
 ```
