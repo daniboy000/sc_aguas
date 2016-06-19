@@ -63,7 +63,7 @@ def get_municipio_areas(id_municipio):
     return municipio_areas
 
 
-def get_balneabilidade_for_municipio(municipio_name, municipio_id, area_id):
+def get_balneabilidade_for_area(municipio_name, municipio_id, area_id):
     """
     http://www.fatma.sc.gov.br/laboratorio/balneabilidade.php?municipio=FLORIANOPOLIS&m=2&b=77
     """
@@ -73,27 +73,49 @@ def get_balneabilidade_for_municipio(municipio_name, municipio_id, area_id):
     soup = BeautifulSoup(request, 'html.parser')
     lines = soup.find_all('tr')
 
+    locais = list() 
     for line in lines:
         tds = line.find_all('td')
-        img = tds[0].find('img')
-        font = tds[1].text
+        img = tds[0].find('img')       
         if img is not None:
-            print('LINE: ', line)
-            print('FONT: ', font)
-
-            print('IMG TEXT: ', img['onclick'])
-            # print('onClick: ', img.onclick)
-            # print()
-            # encontra a funcao abrirMapa()
-            # idx = str.find(img_text, 'abrirMapa(')
-            # print('IDX: ', idx)
-
+            local = tds[0].text
+            condicao = tds[1].text.encode('utf-8')        
+            img = str(img['onclick'])
+            latitude, longitude = getLatLongFromImage(img)            
+            
+            print('LOCAL: ', local)
+            print('CONDICAO: ', condicao)
+            print('LATITUDE: ', latitude) 
+            print('LONGITUDE: ', longitude)
+            
+            locais.append({'local' : local,
+                           'condicao' : condicao,
+                           'latitude' : latitude,
+                           'longitude' : longitude})
+    return locais
+            
+            
+            
+def getLatLongFromImage(stringImg):
+    """
+    
+    """
+    begin = stringImg.find('(')
+    end = stringImg.find(')')
+    
+    if begin < 0 or end < 0:
+        return None
+    
+    geoData = stringImg[begin+1:end]
+    
+    latitude, longitude = geoData.split(',')    
+    
+    return latitude, longitude
 
 if __name__ == "__main__":
     # site urls
     fatma_link = 'http://www.fatma.sc.gov.br/laboratorio/dlg_balneabilidade.php'
-    v2 = 'http://www.fatma.sc.gov.br/laboratorio/gravar.php?operacao=selecionarBalnearios&oid=2'
-
+    
     # request info from site and read as str
     request = urllib2.urlopen(fatma_link)
     page_content = request.read()
@@ -110,4 +132,7 @@ if __name__ == "__main__":
     floripa = get_municipio_areas(2)
     print(floripa)
 
-    baln = get_balneabilidade_for_municipio('FLORIANOPOLIS', 2, 77)
+    baln = get_balneabilidade_for_area('FLORIANOPOLIS', 2, 77)
+    
+    for i in baln:
+        print i
