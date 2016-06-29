@@ -25,8 +25,7 @@ def get_municipios(soup):
     # get all 'option' tags
     combo_municipio_values = combo_municipio.find_all('option')
 
-    # populate the dict
-    municipios_index = dict()
+    municipios_index = {}
     for i in combo_municipio_values:
         municipios_index[i.text.encode('utf-8')] = i['value']
 
@@ -49,16 +48,12 @@ def get_municipio_areas(id_municipio):
         http://www.fatma.sc.gov.br/laboratorio/gravar.php?operacao=
         selecionarBalnearios&oid=2
     """
-    query = "http://www.fatma.sc.gov.br/laboratorio/gravar.php?operacao=selecionarBalnearios&oid=" + str(id_municipio)
-
-    print('QUERY: ', query)
+    url = "http://www.fatma.sc.gov.br/laboratorio/gravar.php?operacao=selecionarBalnearios&oid=" + str(id_municipio)
 
     municipio_areas = {}
-
-    response = requests.get(query)
+    response = requests.get(url)
 
     if response.status_code == 200:
-
         list_request = response.text.split('|')
 
         for i in range(1, len(list_request) - 1, 2):
@@ -73,8 +68,8 @@ def get_balneabilidade_for_area(municipio_name, municipio_id, area_id):
     """
     http://www.fatma.sc.gov.br/laboratorio/balneabilidade.php?municipio=FLORIANOPOLIS&m=2&b=77
     """
-    query = 'http://www.fatma.sc.gov.br/laboratorio/balneabilidade.php?municipio=%s&m=%i&b=%i' % (municipio_name, municipio_id, area_id)
-    response = requests.get(query)
+    url = 'http://www.fatma.sc.gov.br/laboratorio/balneabilidade.php?municipio=%s&m=%i&b=%i' % (municipio_name, municipio_id, area_id)
+    response = requests.get(url)
     locais = []
 
     if response.status_code == 200:
@@ -91,11 +86,6 @@ def get_balneabilidade_for_area(municipio_name, municipio_id, area_id):
                 img = str(img['onclick'])
                 latitude, longitude = getLatLongFromImage(img)
 
-                print('LOCAL: ', local)
-                print('CONDICAO: ', condicao)
-                print('LATITUDE: ', latitude)
-                print('LONGITUDE: ', longitude)
-
                 locais.append({'local' : local,
                                'condicao' : condicao,
                                'latitude' : latitude,
@@ -103,11 +93,7 @@ def get_balneabilidade_for_area(municipio_name, municipio_id, area_id):
     return locais
 
 
-
 def getLatLongFromImage(stringImg):
-    """
-
-    """
     begin = stringImg.find('(')
     end = stringImg.find(')')
 
