@@ -32,10 +32,16 @@ $ mkvirtualenv sc-aguas -p /usr/bin/python3
 $ pip install -r requirements.txt
 ```
 
+## Importando os Dados
+```
+$ python project/manage.py import
+```
+
+
 ## Executando a API
 ```
-$ python manage.py migrate
-$ python manage.py runserver
+$ python project/manage.py migrate
+$ python project/manage.py runserver
 ```
 Após subir o Django, verifique na porta 8000:
 *http://localhost:8000/*
