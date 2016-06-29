@@ -5,6 +5,7 @@ from rest_framework import routers, serializers, viewsets
 
 from aguas.models import Place
 
+
 class PlaceSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Place

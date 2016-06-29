@@ -9,7 +9,7 @@ class Place(models.Model):
 
     def __unicode__(self):
         return u"{} - {}/{} - {}".format(self.place, self.lat,
-                                        self.lon, self.state)
+                                         self.lon, self.state)
 
     @property
     def state(self):

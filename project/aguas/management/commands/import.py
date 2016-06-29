@@ -1,6 +1,6 @@
-    # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from aguas.models import Place
 
 import requests
@@ -48,7 +48,8 @@ def get_municipio_areas(id_municipio):
         http://www.fatma.sc.gov.br/laboratorio/gravar.php?operacao=
         selecionarBalnearios&oid=2
     """
-    url = "http://www.fatma.sc.gov.br/laboratorio/gravar.php?operacao=selecionarBalnearios&oid=" + str(id_municipio)
+    url = "http://www.fatma.sc.gov.br/laboratorio/gravar.php"
+    url += "?operacao=selecionarBalnearios&oid={}".format(id_municipio)
 
     municipio_areas = {}
     response = requests.get(url)
@@ -68,7 +69,8 @@ def get_balneabilidade_for_area(municipio_name, municipio_id, area_id):
     """
     http://www.fatma.sc.gov.br/laboratorio/balneabilidade.php?municipio=FLORIANOPOLIS&m=2&b=77
     """
-    url = 'http://www.fatma.sc.gov.br/laboratorio/balneabilidade.php?municipio=%s&m=%i&b=%i' % (municipio_name, municipio_id, area_id)
+    url = 'http://www.fatma.sc.gov.br/laboratorio/balneabilidade.php?municipio'
+    url += '={}&m={}&b={}'.format(municipio_name, municipio_id, area_id)
     response = requests.get(url)
     locais = []
 
@@ -86,10 +88,10 @@ def get_balneabilidade_for_area(municipio_name, municipio_id, area_id):
                 img = str(img['onclick'])
                 latitude, longitude = getLatLongFromImage(img)
 
-                locais.append({'local' : local,
-                               'condicao' : condicao,
-                               'latitude' : latitude,
-                               'longitude' : longitude})
+                locais.append({'local': local,
+                               'condicao': condicao,
+                               'latitude': latitude,
+                               'longitude': longitude})
     return locais
 
 
@@ -120,10 +122,6 @@ class Command(BaseCommand):
         page_content = response.text
 
         soup = BeautifulSoup(page_content, 'html.parser')
-
-        municipios_index = get_municipios(soup)
-        floripa_id = municipios_index['FLORIANÓPOLIS']
-        floripa = get_municipio_areas(2)
 
         baln = get_balneabilidade_for_area('FLORIANOPOLIS', 2, 77)
 
