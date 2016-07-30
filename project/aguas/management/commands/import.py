@@ -18,13 +18,13 @@ def get_balneabilidade_for_area(municipio_name, municipio_id, area_id):
 
         soup = BeautifulSoup(response.text, 'html.parser')
         lines = soup.find_all('tr')
-        local = soup.find_all('b')[0].text
+        local = soup.find_all('b')[0].text[:-1]
 
         for line in lines:
             tds = line.find_all('td')
             img = tds[0].find('img')
             if img is not None:
-                spot = tds[0].text
+                spot = tds[0].text[2:]
                 condicao = tds[1].text
                 img = str(img['onclick'])
                 latitude, longitude = getLatLongFromImage(img)
