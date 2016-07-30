@@ -9,7 +9,7 @@ from aguas.models import Place
 class PlaceSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Place
-        fields = ('place', 'lat', 'lon', 'proper')
+        fields = ('place', 'spot', 'lat', 'lon', 'proper')
 
 
 class PlaceViewSet(viewsets.ModelViewSet):
